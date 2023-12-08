@@ -2,23 +2,23 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"html/template"
 	"log"
 	"net/http"
 )
 
+// main function, the entry point to the application
+
 func main() {
 	fmt.Println("hello world")
 
-	// define a handler function
-	// the first argument is the URL, '/'
-	// the second is h1, a handler defined above the function
-
+	// using templates to serve index.html
 	h1 := func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, "hello world\n")
-		io.WriteString(w, r.Method)
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl.Execute(w, nil)
 	}
 	http.HandleFunc("/", h1)
 
+	//actually deploys server
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
